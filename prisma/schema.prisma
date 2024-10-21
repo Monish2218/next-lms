@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,77 +11,87 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  email      String   @unique
-  password   String
-  name       String
-  role       Role     @default(STUDENT)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  enrollments Enrollment[]
-  createdCourses Course[]
+  id            String       @id @default(cuid())
+  name          String?
+  email         String       @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  // Relations
+  courses       Course[]
+  enrollments   Enrollment[]
+  progress      Progress[]
 }
 
 model Course {
-  id          Int      @id @default(autoincrement())
+  id          String       @id @default(cuid())
   title       String
   description String
-  status      CourseStatus @default(DRAFT)
-  creatorId   Int
-  creator     User     @relation(fields: [creatorId], references: [id])
+  imageUrl    String?
+  price       Float       @default(0)
+  isPublished Boolean     @default(false)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  // Relations
+  instructorId String
+  instructor  User         @relation(fields: [instructorId], references: [id])
   lessons     Lesson[]
   enrollments Enrollment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  @@index([instructorId])
 }
 
 model Lesson {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  order     Int
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
-  progress  Progress[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  content     String
+  order       Int
+  isPublished Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  // Relations
+  courseId    String
+  course      Course     @relation(fields: [courseId], references: [id])
+  progress    Progress[]
+
+  @@index([courseId])
 }
 
 model Enrollment {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id])
-  courseId   Int
-  course     Course   @relation(fields: [courseId], references: [id])
-  status     EnrollmentStatus @default(ACTIVE)
-  enrolledAt DateTime @default(now())
-  progress   Progress[]
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
 }
 
 model Progress {
-  id           Int      @id @default(autoincrement())
-  enrollmentId Int
-  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id])
-  lessonId     Int
-  lesson       Lesson   @relation(fields: [lessonId], references: [id])
-  completed    Boolean  @default(false)
-  completedAt  DateTime?
-}
+  id        String   @id @default(cuid())
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-enum Role {
-  STUDENT
-  INSTRUCTOR
-  ADMIN
-}
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id])
 
-enum CourseStatus {
-  DRAFT
-  PUBLISHED
-  ARCHIVED
-}
-
-enum EnrollmentStatus {
-  ACTIVE
-  COMPLETED
-  DROPPED
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
 }
