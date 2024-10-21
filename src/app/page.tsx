@@ -1,18 +1,15 @@
-import prisma from "@/lib/db";
+import { HeroSection } from '@/components/HeroSection'
+import { FeatureSection } from '@/components/FeatureSection'
 
-export default async function Home() {
-  const courses = await prisma.course.findMany();
+export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main>
-        <ul>
-        {courses.map((course)=>{
-          return (
-            <li key={course.id}>{course.title}</li>
-          );
-        })}
-        </ul>
+    <div className="flex flex-col min-h-screen">
+      <main className="flex-grow">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <HeroSection />
+          <FeatureSection />
+        </div>
       </main>
     </div>
-  );
+  )
 }
