@@ -28,7 +28,7 @@ export function Navbar() {
                 Courses
             </Link>
           </Button>
-          <Button className='text-indigo-600 dark:text-white' variant="outline" onClick={async()=>{await signIn('google')}}>
+          <Button className='text-indigo-600 dark:text-white' variant="outline" onClick={async()=>{await signIn()}}>
             Sign In
           </Button>
           <button
