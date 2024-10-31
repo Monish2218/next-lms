@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { signIn } from 'next-auth/react'
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from 'next-themes';
 
@@ -28,8 +27,10 @@ export function Navbar() {
                 Courses
             </Link>
           </Button>
-          <Button className='text-indigo-600 dark:text-white' variant="outline" onClick={async()=>{await signIn()}}>
-            Sign In
+          <Button asChild className='text-indigo-600 dark:text-white' variant="outline">
+            <Link href="/login">
+              Sign In
+            </Link>
           </Button>
           <button
             onClick={toggleTheme}

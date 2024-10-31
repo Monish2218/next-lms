@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { signIn } from 'next-auth/react'
 
 export function HeroSection() {
   return (
@@ -22,7 +21,7 @@ export function HeroSection() {
           </Link>
         </div>
         <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-          <Link href="" onClick={async()=>{await signIn("google")}} className="w-full dark:text-white dark:bg-slate-800 dark:hover:bg-slate-900 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
+          <Link href="/login" className="w-full dark:text-white dark:bg-slate-800 dark:hover:bg-slate-900 flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
             Get Started
           </Link>
         </div>
