@@ -13,6 +13,7 @@ import { registerUser } from '@/actions/auth'
 import Link from 'next/link'
 import { Icons } from '@/components/icons'
 import { signIn } from 'next-auth/react'
+import toast from 'react-hot-toast'
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -33,6 +34,8 @@ export function RegisterFormComponent() {
     try {
       const result = await registerUser(data)
       if (result.success) {
+        setError(null);
+        toast.success("Registration Successful")
         router.push('/login')
       } else {
         setError(result.error!)
@@ -74,7 +77,7 @@ export function RegisterFormComponent() {
           <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
       <Button variant="outline" type="button" onClick={() => {signIn("google")}}>
           <Icons.google />
           <span className="ml-2">Google</span>
@@ -82,10 +85,6 @@ export function RegisterFormComponent() {
         <Button variant="outline" type="button" onClick={() => {signIn("github")}}>
           <Icons.gitHub />
           <span className="ml-2">GitHub</span>
-        </Button>
-        <Button variant="outline" type="button" onClick={() => {signIn("facebook")}}>
-          <Icons.facebook />
-          <span className="ml-2">Facebook</span>
         </Button>
       </div>
       <div className="text-center text-sm">
