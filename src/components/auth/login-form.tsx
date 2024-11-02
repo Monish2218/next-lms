@@ -12,11 +12,8 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Link from 'next/link'
 import { Icons } from '@/components/icons'
-
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
-})
+import toast from 'react-hot-toast'
+import { signInSchema as loginSchema } from '@/zod'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -34,11 +31,13 @@ export function LoginFormComponent() {
         email: data.email,
         password: data.password,
       })
-
+      console.log(result)
       if (result?.error) {
         setError('Invalid email or password')
       } else {
-        router.push('/dashboard')
+        setError(null)
+        toast.success("Login Successful");
+        router.push('/home')
       }
     } catch (error) {
       setError('An unexpected error occurred. Please try again. \n Error details: ' + error)
@@ -72,7 +71,7 @@ export function LoginFormComponent() {
           <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 gap-3">
       <Button variant="outline" type="button" onClick={() => {signIn("google")}}>
           <Icons.google />
           <span className="ml-2">Google</span>
@@ -80,10 +79,6 @@ export function LoginFormComponent() {
         <Button variant="outline" type="button" onClick={() => {signIn("github")}}>
           <Icons.gitHub />
           <span className="ml-2">GitHub</span>
-        </Button>
-        <Button variant="outline" type="button" onClick={() => {signIn("facebook")}}>
-          <Icons.facebook />
-          <span className="ml-2">Facebook</span>
         </Button>
       </div>
       <div className="text-center text-sm">
