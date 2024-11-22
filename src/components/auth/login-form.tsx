@@ -31,7 +31,6 @@ export function LoginFormComponent() {
         email: data.email,
         password: data.password,
       })
-      console.log(result)
       if (result?.error) {
         setError('Invalid email or password')
       } else {

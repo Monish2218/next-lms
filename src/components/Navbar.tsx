@@ -45,6 +45,7 @@ export function Navbar() {
           </button>
 
         </div>
+        {/* TODO: Modify Navbar for small screen */}
       </nav>
     </header>
   )
